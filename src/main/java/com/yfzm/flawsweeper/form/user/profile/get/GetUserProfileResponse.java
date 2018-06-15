@@ -1,4 +1,4 @@
-package com.yfzm.flawsweeper.form.user.profile;
+package com.yfzm.flawsweeper.form.user.profile.get;
 
 public class GetUserProfileResponse {
     private Boolean status;
@@ -7,6 +7,9 @@ public class GetUserProfileResponse {
     private String email;
     private String phone;
     private String bio;
+    private String url;
+    private String location;
+    private String school;
 
     public GetUserProfileResponse(Boolean status) {
         this.status = status;
@@ -58,5 +61,29 @@ public class GetUserProfileResponse {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
     }
 }

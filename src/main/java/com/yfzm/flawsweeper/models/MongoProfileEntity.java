@@ -18,6 +18,12 @@ public class MongoProfileEntity {
 
     private String bio;
 
+    private String url;
+
+    private String location;
+
+    private String school;
+
     public String getUserId() {
         return userId;
     }
@@ -64,5 +70,29 @@ public class MongoProfileEntity {
 
     public void setBio(String bio) {
         this.bio = bio;
+    }
+
+    public String getUrl() {
+        return url;
+    }
+
+    public void setUrl(String url) {
+        this.url = url;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public String getSchool() {
+        return school;
+    }
+
+    public void setSchool(String school) {
+        this.school = school;
     }
 }

@@ -6,11 +6,9 @@ import com.yfzm.flawsweeper.form.user.deletion.DeleteUsersForm;
 import com.yfzm.flawsweeper.form.user.deletion.DeleteUsersResponse;
 import com.yfzm.flawsweeper.form.user.list.ListUserInfo;
 import com.yfzm.flawsweeper.form.user.list.ListUserResponse;
-import com.yfzm.flawsweeper.form.user.profile.GetUserProfileResponse;
 import com.yfzm.flawsweeper.form.user.state.UserStateForm;
 import com.yfzm.flawsweeper.form.user.state.UserStateResponse;
 import com.yfzm.flawsweeper.form.user.username.GetUsernameResponse;
-import com.yfzm.flawsweeper.models.MongoProfileEntity;
 import com.yfzm.flawsweeper.models.UserEntity;
 import com.yfzm.flawsweeper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,15 +119,6 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("/userProfile")
-    public GetUserProfileResponse getUserProfile(HttpSession httpSession) {
-        SessionInfo sessionInfo = (SessionInfo) httpSession.getAttribute("sessionInfo");
-        if (sessionInfo == null || sessionInfo.getUid() == null) {
-            return new GetUserProfileResponse(false);
-        }
 
-        return userService.getUserProfileById(sessionInfo.getUid());
-
-    }
 
 }

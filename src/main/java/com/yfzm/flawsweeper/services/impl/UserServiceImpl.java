@@ -11,8 +11,8 @@ import com.yfzm.flawsweeper.form.auth.register.RegisterForm;
 import com.yfzm.flawsweeper.form.auth.register.RegisterResponse;
 import com.yfzm.flawsweeper.form.auth.session.SessionInfo;
 import com.yfzm.flawsweeper.form.user.deletion.DeleteUsersForm;
-import com.yfzm.flawsweeper.form.user.list.ListUserInfo;
-import com.yfzm.flawsweeper.form.user.profile.GetUserProfileResponse;
+import com.yfzm.flawsweeper.form.user.profile.get.GetUserProfileResponse;
+import com.yfzm.flawsweeper.form.user.profile.update.UpdateUserProfileForm;
 import com.yfzm.flawsweeper.form.user.state.UserStateForm;
 import com.yfzm.flawsweeper.models.MongoProfileEntity;
 import com.yfzm.flawsweeper.models.UserEntity;
@@ -37,7 +37,6 @@ import java.util.Base64;
 import java.util.List;
 import java.util.Optional;
 
-import static com.yfzm.flawsweeper.util.Constant.ADMIN_USER;
 import static com.yfzm.flawsweeper.util.Constant.DEFAULT_PROFILE_PHOTO_NAME;
 import static com.yfzm.flawsweeper.util.Constant.NORMAL_USER;
 import static com.yfzm.flawsweeper.util.Util.createRandomId;
@@ -50,7 +49,6 @@ public class UserServiceImpl implements UserService {
     private final ProfileDao profileDao;
     private final GridFsOperations gridFsOperations;
 
-    private DBObject metaData = new BasicDBObject();
     @Resource
     private MongoDbFactory mongoDbFactory;
 
@@ -107,6 +105,8 @@ public class UserServiceImpl implements UserService {
         profile.setBio("");
         profile.setEmail(form.getEmail());
         profile.setPhone(form.getPhone());
+
+        DBObject metaData = new BasicDBObject();
         try {
             InputStream is = new FileInputStream("src/main/resources/static/" + DEFAULT_PROFILE_PHOTO_NAME);
             metaData.put("type", "image");
@@ -176,11 +176,15 @@ public class UserServiceImpl implements UserService {
         GetUserProfileResponse response = new GetUserProfileResponse(false);
         Optional<MongoProfileEntity> profileEntity = profileDao.findById(uid);
         if (profileEntity.isPresent()) {
+            MongoProfileEntity entity = profileEntity.get();
             response.setStatus(true);
-            response.setUsername(profileEntity.get().getUsername());
-            response.setEmail(profileEntity.get().getEmail());
-            response.setPhone(profileEntity.get().getPhone());
-            response.setBio(profileEntity.get().getBio());
+            response.setUsername(entity.getUsername());
+            response.setEmail(entity.getEmail());
+            response.setPhone(entity.getPhone());
+            response.setBio(entity.getBio());
+            response.setUrl(entity.getUrl());
+            response.setLocation(entity.getLocation());
+            response.setSchool(entity.getSchool());
             try {
                 GridFSFile imageFile = gridFsOperations.findOne(
                         Query.query(Criteria.where("_id").is(profileEntity.get().getPhotoId())));
@@ -193,6 +197,41 @@ public class UserServiceImpl implements UserService {
             }
         }
         return response;
+    }
+
+    @Override
+    public Boolean updateUserProfileViaForm(UpdateUserProfileForm form, String uid) {
+        Optional<MongoProfileEntity> profile = profileDao.findById(uid);
+        if (profile.isPresent()) {
+            MongoProfileEntity entity = profile.get();
+            entity.setEmail(form.getEmail());
+            entity.setPhone(form.getPhone());
+            entity.setBio(form.getBio());
+            entity.setUrl(form.getUrl());
+            entity.setLocation(form.getLocation());
+            entity.setSchool(form.getSchool());
+            profileDao.save(entity);
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public Boolean updateUserProfilePhoto(String uid, String filename, InputStream is) {
+        DBObject metaData = new BasicDBObject();
+        Optional<MongoProfileEntity> profile = profileDao.findById(uid);
+
+        if (profile.isPresent()) {
+            MongoProfileEntity entity = profile.get();
+            metaData.put("type", "image");
+            gridFsOperations.delete(
+                    Query.query(Criteria.where("_id").is(entity.getPhotoId()))
+            );
+            String imageId = gridFsOperations.store(is, filename, "image/png", metaData).toString();
+            entity.setPhotoId(imageId);
+            profileDao.save(entity);
+        }
+        return true;
     }
 
 }
