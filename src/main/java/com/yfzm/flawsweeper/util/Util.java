@@ -18,10 +18,10 @@ public class Util {
             strJsonData = URLDecoder.decode(strJsonData, "utf-8");
         } catch (NullPointerException e) {
             System.out.println("空参数列表");
-            return "";
+            return null;
         } catch (UnsupportedEncodingException e) {
             System.out.println("编码错误");
-            return "";
+            return null;
         }
         return strJsonData;
     }

@@ -18,4 +18,6 @@ public class Constant {
         public static final int INVALID_FORM = 3;
         public static final int UNKOWN_ERROR = 4;
     }
+
+    public static final String DEFAULT_PROFILE_PHOTO_NAME = "default_profile_photo.png";
 }
