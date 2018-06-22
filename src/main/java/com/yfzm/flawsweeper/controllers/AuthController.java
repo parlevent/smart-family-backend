@@ -12,6 +12,7 @@ import com.yfzm.flawsweeper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +22,7 @@ import static com.yfzm.flawsweeper.util.Util.getAndEncodeJsonData;
 
 
 @RestController
+@RequestMapping("/auth")
 public class AuthController {
 
     private final UserService userService;
@@ -30,7 +32,7 @@ public class AuthController {
         this.userService = userService;
     }
 
-    @PostMapping("/loginAuth")
+    @PostMapping("/login")
     public LoginResponse login(LoginForm loginForm, HttpSession session) {
         if (loginForm.getType() == null) loginForm.setType(0);
 
@@ -48,7 +50,7 @@ public class AuthController {
         return response;
     }
 
-    @GetMapping("/logoutNow")
+    @GetMapping("/logout")
     public LogoutResponse logout(HttpSession session) {
         LogoutResponse response = new LogoutResponse();
         response.setStatus(false);
@@ -59,7 +61,7 @@ public class AuthController {
         return response;
     }
 
-    @PostMapping("/doRegister")
+    @PostMapping("/register")
     public RegisterResponse register(HttpServletRequest request, HttpSession session) {
 
         String JsonData = getAndEncodeJsonData(request, "json");

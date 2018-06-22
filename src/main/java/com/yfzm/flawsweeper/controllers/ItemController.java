@@ -39,6 +39,7 @@ import static com.yfzm.flawsweeper.util.Constant.PAGE_SIZE;
 import static com.yfzm.flawsweeper.util.Util.getAndEncodeJsonData;
 
 @RestController
+@RequestMapping("/item")
 public class ItemController {
 
     private final ItemService itemService;
@@ -50,29 +51,8 @@ public class ItemController {
         this.tagService = tagService;
     }
 
-    @GetMapping("/getList")
-    public ListItemResponse getList(ListItemForm form, HttpSession session) {
-        SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
-        if (sessionInfo == null) {
-            return new ListItemResponse(false);
-        }
 
-        List<ItemEntity> items = itemService.getItemListViaListItemForm(sessionInfo, PAGE_SIZE, form);
-
-        return createItemListViaItemEntities(items);
-    }
-
-    @GetMapping("/getSpecificUserItemList")
-    public ListItemResponse getSpecificUserItemList(String userId, HttpSession session) {
-        SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
-        if (sessionInfo == null || sessionInfo.getIsAdmin() != ADMIN_USER) {
-            return new ListItemResponse(false);
-        }
-        List<ItemEntity> items = itemService.getItemListViaUserId(userId);
-        return createItemListViaItemEntities(items);
-    }
-
-    @GetMapping("/getDetail")
+    @GetMapping("/entry")
     public GetItemDetailResponse getItemDetail(GetItemDetailForm form, HttpSession session) {
         GetItemDetailResponse response = new GetItemDetailResponse();
         response.setStatus(false);
@@ -113,7 +93,7 @@ public class ItemController {
         return response;
     }
 
-    @PostMapping("/editItem")
+    @PostMapping("/entry")
     public ModifyItemResponse modifyItem(HttpServletRequest request, HttpSession session) {
         ModifyItemResponse response = new ModifyItemResponse();
         response.setStatus(false);
@@ -132,7 +112,7 @@ public class ItemController {
         return response;
     }
 
-    @PostMapping("/addItem")
+    @PutMapping("/entry")
     public CreateItemResponse addItem(HttpServletRequest request, HttpSession session) {
         CreateItemResponse response = new CreateItemResponse();
         response.setStatus(false);
@@ -156,26 +136,51 @@ public class ItemController {
         return response;
     }
 
-    @PostMapping("/deleteItem")
-    public DeleteItemResponse deleteItem(DeleteItemForm form, HttpSession session) {
+    @DeleteMapping("/entry")
+    public DeleteItemResponse deleteItem(@RequestParam("id") String itemId, HttpSession session) {
         DeleteItemResponse response = new DeleteItemResponse();
         response.setStatus(false);
 
         SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
-        if (sessionInfo == null) {
+        if (sessionInfo == null || itemId == null) {
             return response;
         }
 
-        response.setStatus(itemService.deleteItemByItemId(form.getId(), sessionInfo));
+        response.setStatus(itemService.deleteItemByItemId(itemId, sessionInfo));
         return response;
     }
 
-    @GetMapping("/getAllTags")
+
+    @GetMapping("/list")
+    public ListItemResponse getList(ListItemForm form, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
+        if (sessionInfo == null) {
+            return new ListItemResponse(false);
+        }
+
+        List<ItemEntity> items = itemService.getItemListViaListItemForm(sessionInfo, PAGE_SIZE, form);
+
+        return createItemListViaItemEntities(items);
+    }
+
+    @GetMapping("/list-only")
+    public ListItemResponse getSpecificUserItemList(String userId, HttpSession session) {
+        SessionInfo sessionInfo = (SessionInfo) session.getAttribute("sessionInfo");
+        if (sessionInfo == null || sessionInfo.getIsAdmin() != ADMIN_USER) {
+            return new ListItemResponse(false);
+        }
+        List<ItemEntity> items = itemService.getItemListViaUserId(userId);
+        return createItemListViaItemEntities(items);
+    }
+
+
+    @GetMapping("/tags")
     public GetAllTagsResponse getAllTags() {
         GetAllTagsResponse response = new GetAllTagsResponse();
         response.setTags(tagService.getAllTags());
         return response;
     }
+
 
     @PostMapping("/redo")
     public RedoItemResponse redoItem(HttpServletRequest request, HttpSession session) {
@@ -199,6 +204,7 @@ public class ItemController {
         }
         return response;
     }
+
 
     private ListItemResponse createItemListViaItemEntities(List<ItemEntity> items) {
         ListItemResponse response = new ListItemResponse(true);

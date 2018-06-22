@@ -14,6 +14,7 @@ import com.yfzm.flawsweeper.services.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import static com.yfzm.flawsweeper.util.Constant.ADMIN_USER;
 import static com.yfzm.flawsweeper.util.Util.getAndEncodeJsonData;
 
 @RestController
+@RequestMapping("/user")
 public class UserController {
     private final UserService userService;
 
@@ -33,7 +35,7 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/getUsers")
+    @GetMapping("/list")
     public ListUserResponse listAllUsers(HttpSession httpSession) {
         ListUserResponse response = new ListUserResponse(false);
 
@@ -64,7 +66,7 @@ public class UserController {
         return response;
     }
 
-    @PostMapping("/setUsersState")
+    @PostMapping("/state")
     public UserStateResponse setUserState(HttpServletRequest request, HttpSession httpSession) {
         UserStateResponse response = new UserStateResponse(false);
         SessionInfo sessionInfo = (SessionInfo) httpSession.getAttribute("sessionInfo");
@@ -101,7 +103,7 @@ public class UserController {
         return response;
     }
 
-    @GetMapping("/getUsername")
+    @GetMapping("/username")
     public GetUsernameResponse getUserUsername(HttpSession httpSession) {
         GetUsernameResponse response = new GetUsernameResponse(false);
         SessionInfo sessionInfo = (SessionInfo) httpSession.getAttribute("sessionInfo");
