@@ -1,8 +1,11 @@
+workspace:
+  base: /backend
+  path: src/github.com/yfzm/FlawSweeper_Spring_Server
 pipeline:
   build:
     image: gradle:5.1.0-jdk8-alpine
     commands:
-      - gradle build
+      - gradlew build
   publish:
     image: plugins/docker
     repo: bywind/flawsweeper-backend
