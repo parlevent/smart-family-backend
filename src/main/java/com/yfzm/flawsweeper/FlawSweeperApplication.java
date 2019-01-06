@@ -5,7 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 @SpringBootApplication
 public class FlawSweeperApplication {
@@ -20,4 +23,15 @@ public class FlawSweeperApplication {
         factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/index.html"));
         return factory;
     }
+
+    @Configuration
+    public class CorsConfig extends WebMvcConfigurerAdapter {
+        @Override
+        public void addCorsMappings(CorsRegistry registry) {
+            registry.addMapping("/**").allowedOrigins("*")
+                    .allowedMethods("GET", "HEAD", "POST","PUT", "DELETE", "OPTIONS")
+                    .allowCredentials(true).maxAge(3600);
+        }
+    }
+
 }

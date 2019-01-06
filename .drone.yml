@@ -1,0 +1,11 @@
+pipeline:
+  build:
+    image: gradle:5.1.0-jdk8-alpine
+    commands:
+      - gradlew build
+  publish:
+    image: plugins/docker
+    repo: bywind/flawsweeper-backend
+    tags: ["latest"]
+    secrets: [ docker_username, docker_password ]
+    dockerfile: Dockerfile
