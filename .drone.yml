@@ -3,9 +3,11 @@ workspace:
   path: src/github.com/yfzm/FlawSweeper_Spring_Server
 pipeline:
   build:
-    image: gradle:5.1.0-jdk8-alpine
+    image: java:openjdk-8
+    environment:
+      - GRADLE_USER_HOME=~/.gradle
     commands:
-      - gradle test
+      - ./gradlew test
   publish:
     image: plugins/docker
     repo: bywind/flawsweeper-backend
