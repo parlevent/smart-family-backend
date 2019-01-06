@@ -2,7 +2,7 @@ pipeline:
   build:
     image: gradle:5.1.0-jdk8-alpine
     commands:
-      - gradlew build
+      - gradle build
   publish:
     image: plugins/docker
     repo: bywind/flawsweeper-backend
