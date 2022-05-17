@@ -5,6 +5,8 @@ public class Constant {
 
     public static final byte PUBLIC_ITEM_MODE = 0;
     public static final byte PRIVATE_ITEM_MODE = 1;
+    public static final byte SWITCH_OFF = 0;
+    public static final byte SWITCH_ON = 1;
 
     public static final int NORMAL_USER = 0;
     public static final int ADMIN_USER = 1;

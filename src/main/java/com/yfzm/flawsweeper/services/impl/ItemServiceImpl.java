@@ -56,7 +56,8 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public List<ItemEntity> getItemListViaListItemForm(SessionInfo sessionInfo, int pageSize, ListItemForm form) {
         if (sessionInfo.getIsAdmin() == ADMIN_USER) {
-            return itemDao.findAllByUserUserId(sessionInfo.getUid());
+//            return itemDao.findAllByUserUserId(sessionInfo.getUid());
+            return itemDao.findAll();
         }
 
         String sortMethod = SORT_BY_VIEW_COUNT.equals(form.getMethod()) ? "viewCount" : "createTime";
@@ -64,8 +65,10 @@ public class ItemServiceImpl implements ItemService {
 
         Pageable pageable = PageRequest.of(form.getPage(), pageSize, sort);
 //        Page<ItemEntity> items = itemDao.findAllByUserUserId(uid, pageable);
-        Page<ItemEntity> items =
-                itemDao.findAllByUserUserIdOrUserType(sessionInfo.getUid(), ADMIN_USER, pageable);
+//        Page<ItemEntity> items =
+//                itemDao.findAllByUserUserIdOrUserType(sessionInfo.getUid(), ADMIN_USER, pageable);
+
+        Page<ItemEntity> items = itemDao.findAll(pageable);
 
 //        Specification<ItemEntity> spec = new Specification<ItemEntity>() {
 //            @Override
@@ -123,7 +126,7 @@ public class ItemServiceImpl implements ItemService {
     public Boolean modifyItemViaModifyItemForm(ModifyItemForm form) {
         String itemId = form.getId();
         Long createTime = form.getCreateTime();
-        if (itemId == null || createTime == null) {
+        if (itemId == null) {
             return false;
         }
 
@@ -132,11 +135,11 @@ public class ItemServiceImpl implements ItemService {
             return false;
         }
 
-        item.setCreateTime(new Timestamp(form.getCreateTime()));
         if (form.getTitle() != null) item.setTitle(form.getTitle());
         if (form.getqText() != null) item.setContent(form.getqText());
         if (form.getcAnswer() != null) item.setAnswer(form.getcAnswer());
         if (form.getReason() != null) item.setReason(form.getReason());
+        if (form.getSwitchStatus() != null) item.setStatus(form.getSwitchStatus() ? SWITCH_ON : SWITCH_OFF);
         item.setEditCount(item.getEditCount() + 1);
         if (form.getqTag() != null) item.setTags(tagService.updateAndReturnTagSet(form.getqTag()));
         itemDao.saveAndFlush(item);
@@ -153,8 +156,6 @@ public class ItemServiceImpl implements ItemService {
 
         if (user == null ||
                 form.getTitle() == null ||
-                form.getqText() == null ||
-                form.getcAnswer() == null ||
                 form.getCreateTime() == 0) {
             return null;
         }
@@ -169,6 +170,7 @@ public class ItemServiceImpl implements ItemService {
         item.setRedoCount(0);
         item.setMode((isAdmin == 0) ? PRIVATE_ITEM_MODE : PUBLIC_ITEM_MODE);
         item.setReason(form.getReason());
+        item.setStatus(SWITCH_OFF);
 
         item.setUser(user);
 

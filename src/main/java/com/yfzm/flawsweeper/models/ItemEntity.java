@@ -6,10 +6,11 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "item", schema = "flaw_sweeper", catalog = "")
+@Table(name = "item", schema = "smart_family", catalog = "")
 public class ItemEntity {
     private String itemId;
     private String title;
+    private byte status;
     private String content;
     private String answer;
     private Timestamp createTime;
@@ -43,7 +44,7 @@ public class ItemEntity {
     }
 
     @Basic
-    @Column(name = "content", nullable = false, length = -1)
+    @Column(name = "content", nullable = false, length = 128)
     public String getContent() {
         return content;
     }
@@ -113,7 +114,7 @@ public class ItemEntity {
     }
 
     @Basic
-    @Column(name = "reason", nullable = true, length = -1)
+    @Column(name = "reason", nullable = true, length = 128)
     public String getReason() {
         return reason;
     }
@@ -158,6 +159,7 @@ public class ItemEntity {
         if (o == null || getClass() != o.getClass()) return false;
         ItemEntity that = (ItemEntity) o;
         return mode == that.mode &&
+                status == that.status &&
                 Objects.equals(itemId, that.itemId) &&
                 Objects.equals(title, that.title) &&
                 Objects.equals(content, that.content) &&
@@ -172,6 +174,16 @@ public class ItemEntity {
     @Override
     public int hashCode() {
 
-        return Objects.hash(itemId, title, content, answer, createTime, viewCount, editCount, redoCount, mode, reason);
+        return Objects.hash(itemId, title, content, answer, createTime, viewCount, editCount, redoCount, mode, status, reason);
+    }
+
+    @Basic
+    @Column(name = "status", nullable = false)
+    public byte getStatus() {
+        return status;
+    }
+
+    public void setStatus(byte status) {
+        this.status = status;
     }
 }

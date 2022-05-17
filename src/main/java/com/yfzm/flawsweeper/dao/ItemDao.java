@@ -16,6 +16,9 @@ public interface ItemDao extends JpaRepository<ItemEntity, String>, JpaSpecifica
 
     List<ItemEntity> findAllByUserUserId(String userId);
 
+    Page<ItemEntity> findAll(Pageable pageable);
+    List<ItemEntity> findAll();
+
     Page<ItemEntity> findAllByUserUserId(String userId, Pageable pageable);
 
     Page<ItemEntity> findAllByUserUserIdOrUserType(String userId, int type, Pageable pageable);

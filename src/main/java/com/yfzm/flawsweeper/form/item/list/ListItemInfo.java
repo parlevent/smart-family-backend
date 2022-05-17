@@ -8,6 +8,7 @@ public class ListItemInfo {
     private List<String> qTag;
     private long createTime;
     private Boolean bySelf;
+    private Boolean switchStatus;
     private int viewCount;
     private int redoCount;
 
@@ -65,5 +66,13 @@ public class ListItemInfo {
 
     public void setRedoCount(int redoCount) {
         this.redoCount = redoCount;
+    }
+
+    public Boolean getSwitchStatus() {
+        return switchStatus;
+    }
+
+    public void setSwitchStatus(Boolean switchStatus) {
+        this.switchStatus = switchStatus;
     }
 }

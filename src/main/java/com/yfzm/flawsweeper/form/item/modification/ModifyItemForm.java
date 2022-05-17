@@ -10,6 +10,7 @@ public class ModifyItemForm {
     private Long createTime;
     private String reason;
     private String cAnswer;
+    private Boolean switchStatus;
 
     public String getId() {
         return id;
@@ -65,5 +66,13 @@ public class ModifyItemForm {
 
     public void setcAnswer(String cAnswer) {
         this.cAnswer = cAnswer;
+    }
+
+    public Boolean getSwitchStatus() {
+        return switchStatus;
+    }
+
+    public void setSwitchStatus(Boolean switchStatus) {
+        this.switchStatus = switchStatus;
     }
 }

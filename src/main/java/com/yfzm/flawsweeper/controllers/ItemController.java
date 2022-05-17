@@ -76,6 +76,7 @@ public class ItemController {
         response.setcAnswer(item.getAnswer());
         response.setCreateTime(item.getCreateTime().getTime());
         response.setBySelf(item.getMode() == 1);
+        response.setSwitchStatus(item.getStatus() == 1);
         response.setViewCount(item.getViewCount());
         response.setEditCount(item.getEditCount());
         response.setRedoCount(item.getRedoCount());
@@ -224,6 +225,7 @@ public class ItemController {
             info.setqTag(tags);
             info.setCreateTime(item.getCreateTime().getTime());
             info.setBySelf(item.getMode() == 1);
+            info.setSwitchStatus(item.getStatus() == 1);
             info.setRedoCount(item.getRedoCount());
             info.setViewCount(item.getViewCount());
 

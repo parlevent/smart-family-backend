@@ -74,9 +74,7 @@ public class UserServiceImpl implements UserService {
         RegisterResponse response = new RegisterResponse(false);
 
         if (form.getUsername() == null ||
-                form.getPassword() == null ||
-                form.getEmail() == null ||
-                form.getPhone() == null) {
+                form.getPassword() == null) {
             response.setErrCode(Constant.RegisterErrorCode.INVALID_FORM);
             response.setErrMsg("表单错误");
             return response;
@@ -93,8 +91,17 @@ public class UserServiceImpl implements UserService {
         user.setUserId(uid);
         user.setUsername(form.getUsername());
         user.setPassword(form.getPassword());
-        user.setEmail(form.getEmail());
-        user.setPhone(form.getPhone());
+
+        if (form.getEmail() != null && form.getEmail().length() != 0)
+            user.setEmail(form.getEmail());
+        else
+            user.setEmail("无");
+
+        if (form.getPhone() != null && form.getPhone().length() != 0)
+            user.setPhone(form.getPhone());
+        else
+            user.setPhone("无");
+
         user.setStatus((byte) 1);
         user.setType(0);
         userDao.saveAndFlush(user);
@@ -120,7 +127,7 @@ public class UserServiceImpl implements UserService {
 
         response.setStatus(true);
         response.setUserId(uid);
-        session.setAttribute("sessionInfo", new SessionInfo(uid, 0));
+//        session.setAttribute("sessionInfo", new SessionInfo(uid, 0));
         return response;
     }
 

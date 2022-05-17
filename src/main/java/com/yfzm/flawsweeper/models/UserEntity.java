@@ -5,7 +5,7 @@ import java.util.Objects;
 import java.util.Set;
 
 @Entity
-@Table(name = "user", schema = "flaw_sweeper", catalog = "")
+@Table(name = "user", schema = "smart_family", catalog = "")
 public class UserEntity {
     private String userId;
     private String username;

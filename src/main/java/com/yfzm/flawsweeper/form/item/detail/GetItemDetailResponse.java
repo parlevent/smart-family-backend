@@ -12,6 +12,7 @@ public class GetItemDetailResponse {
     private String cAnswer;
     private long createTime;
     private Boolean bySelf;
+    private Boolean switchStatus;
     private int viewCount;
     private int editCount;
     private int redoCount;
@@ -119,5 +120,13 @@ public class GetItemDetailResponse {
 
     public void setRedo(List<RedoInfo> redo) {
         this.redo = redo;
+    }
+
+    public Boolean getSwitchStatus() {
+        return switchStatus;
+    }
+
+    public void setSwitchStatus(Boolean switchStatus) {
+        this.switchStatus = switchStatus;
     }
 }
